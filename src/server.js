@@ -8,8 +8,10 @@ const PORT = 4000;
 
 const app = express();  // create express application
 const logger = morgan("dev"); // morgan함수는 middleware를 return, next()를 가지고 있음.
-app.use(logger);
 
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views"); // 기본 디렉토리를 변경
+app.use(logger);
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);    // 누군가가 "/videos"로 시작하는 url에 접근하면 videoRouter에 있는 controller를 찾게함.
 app.use("/users", userRouter);
