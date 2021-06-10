@@ -12,6 +12,7 @@ const logger = morgan("dev"); // morgan함수는 middleware를 return, next()를
 app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views"); // 기본 디렉토리를 변경
 app.use(logger);
+app.use(express.urlencoded({ extended: true }));
 app.use("/", globalRouter);
 app.use("/videos", videoRouter);    // 누군가가 "/videos"로 시작하는 url에 접근하면 videoRouter에 있는 controller를 찾게함.
 app.use("/users", userRouter);
