@@ -20,6 +20,7 @@
   "homepage": "https://github.com/23Yong/wetube#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "mongoose": "^5.12.13",
     "morgan": "^1.10.0",
     "pug": "^3.0.2"
   },

@@ -1,3 +1,4 @@
+import "./db";  // connecting to Mongo
 import express from "express";
 import morgan from "morgan";    // morgan은 node.js 용 request logger middleware
 import globalRouter from "./routers/globalRouter";
