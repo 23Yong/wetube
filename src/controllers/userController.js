@@ -133,7 +133,7 @@ export const finishGithubLogin = async(req, res) => {
             });
         } 
         req.session.loggedIn = true;
-        req.session.user = username;
+        req.session.user = user;
         return res.redirect("/");
     } else {
         return res.redirect("/login");
@@ -143,6 +143,11 @@ export const logout = (req, res) => {
     req.session.destroy();
     return res.redirect("/");
 };
+export const getEdit = (req, res) => {
+    return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+export const postEdit = (req, res) => {
+    return res.render("edit-profile");
+};
 
-export const edit = (req, res) => res.send("Edit User");
 export const see = (req, res) => res.send("See User");
