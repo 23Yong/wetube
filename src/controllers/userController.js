@@ -1,10 +1,8 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
-import { token } from "morgan";
 
-export const getJoin = (req, res) =>
-    res.render("join", { pageTitle: "Join" });
+export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
     const { name, username, email, password, password2, location } = req.body;
     const pageTitle = "Join";
@@ -36,7 +34,7 @@ export const postJoin = async (req, res) => {
         return res.render("join", {
             pageTitle: "Join",
             errorMessage: error._message
-        })
+        });
     }
     
 };
@@ -62,10 +60,8 @@ export const postLogin = async(req, res) => {
     }
     req.session.loggedIn = true;
     req.session.user = user;
-    
-    // add cookie & session
     return res.redirect("/");
-}
+};
 export const startGithubLogin = (req, res) => {
     const baseUrl = "https://github.com/login/oauth/authorize";
     const config = {
@@ -89,9 +85,7 @@ export const finishGithubLogin = async(req, res) => {
     const tokenRequest = await (
         await fetch(finalUrl, {
             method: "POST",
-            headers: {
-                Accept: "application/json"
-            }
+            headers: { Accept: "application/json", },
         })
     ).json();
 
@@ -118,9 +112,10 @@ export const finishGithubLogin = async(req, res) => {
             (email) => email.primary === true && email.verified === true
         );
         if(!emailObj) {
+            // set notification
             return res.redirect("/login");
         }
-        let user = await User.findOne({email: emailObj.email});
+        let user = await User.findOne({ email: emailObj.email });
         if (!user) {
                 avatarUrl: userData.avatar_url,
                 user = await User.create({
@@ -146,8 +141,33 @@ export const logout = (req, res) => {
 export const getEdit = (req, res) => {
     return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
-export const postEdit = (req, res) => {
-    return res.render("edit-profile");
+export const postEdit = async (req, res) => {
+    const { 
+        session: { user: { _id } },
+        body: { name, email, username, location },
+    } = req;
+    const updatedUser = await User.findByIdAndUpdate(_id, {
+            name,
+            email,
+            username,
+            location,
+        },
+        { new: true },
+    );
+    const sessionUser = req.session.user;
+    
+    if(sessionUser.name !== req.body.name || sessionUser.username !== req.body.username || 
+        sessionUser.email !== req.body.email) {
+        const exists = await User.exists({ $or: [{ username }, { email }] });
+        if(!exists) { 
+            req.session.user = updatedUser;
+        } else {
+            return res.render("edit-profile", { pageTitle: "Edit Profile", errorMessage: "Already Exists"});
+        }
+    } else {
+        return res.render("edit-profile", { pageTitle: "Edit Profile", errorMessage: "No change"});
+    }
+    return res.redirect("/users/edit");
 };
 
 export const see = (req, res) => res.send("See User");
