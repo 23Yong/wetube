@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import session from "express-session";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -143,12 +144,24 @@ export const getEdit = (req, res) => {
 };
 export const postEdit = async (req, res) => {
     const { 
-        session: { user: { _id } },
+        session: { user: { _id, avatarUrl } },
         body: { name, email, username, location },
         file,
     } = req;
-    console.log(file);
+    
+    const sessionUser = req.session.user;
+    if(sessionUser.username !== username || sessionUser.email !== email){
+        const alreadyTaken = await User.findOne({ $or: [{ username }, { email }]});
+        
+        if(alreadyTaken && alreadyTaken._id.toString() !== _id){
+            return res.status(400).render("edit-profile", {
+                pageTitle: "Edit Profile",
+                errorMessage: "This username/email is already taken.",
+            });
+        }
+    }
     const updatedUser = await User.findByIdAndUpdate(_id, {
+            avatarUrl: file ? file.path : avatarUrl,
             name,
             email,
             username,
@@ -156,19 +169,7 @@ export const postEdit = async (req, res) => {
         },
         { new: true },
     );
-    const sessionUser = req.session.user;
-    
-    if(sessionUser.name !== req.body.name || sessionUser.username !== req.body.username || 
-        sessionUser.email !== req.body.email) {
-        const exists = await User.exists({ $or: [{ username }, { email }] });
-        if(!exists) { 
-            req.session.user = updatedUser;
-        } else {
-            return res.render("edit-profile", { pageTitle: "Edit Profile", errorMessage: "Already Exists"});
-        }
-    } else {
-        return res.render("edit-profile", { pageTitle: "Edit Profile", errorMessage: "No change"});
-    }
+    req.session.user = updatedUser;
     return res.redirect("/users/edit");
 };
 
