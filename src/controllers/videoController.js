@@ -35,7 +35,9 @@ export const postEdit = async (req, res) => { // 변경사항을 저장
     const { user: { _id }, } = req.session;
     const { id } = req.params;
     const { title, description, hashtags } = req.body;
-    const video = await Video.exists({ _id: id }); // video object 대신 true or false를 받는 것
+    
+    const video = await Video.findById(id);
+
     if (!video) {
         return res.status(404).render("404", { pageTitle: "Video not found." });
     }
