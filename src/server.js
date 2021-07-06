@@ -25,6 +25,7 @@ app.use(session({
 
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);    // 누군가가 "/videos"로 시작하는 url에 접근하면 videoRouter에 있는 controller를 찾게함.
 app.use("/users", userRouter);

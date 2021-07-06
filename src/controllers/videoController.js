@@ -37,7 +37,7 @@ export const postEdit = async (req, res) => { // 변경사항을 저장
     const { title, description, hashtags } = req.body;
     
     const video = await Video.findById(id);
-
+    
     if (!video) {
         return res.status(404).render("404", { pageTitle: "Video not found." });
     }
