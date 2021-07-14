@@ -1,0 +1,67 @@
+#videoContainer {
+    width: 100%;
+    position: relative;
+    video {
+        width: 100%;
+    }
+    
+    #videoControls {
+        //opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        &.showing {
+            opacity: 1;
+        }
+        align-items: center;
+        margin: 0 auto;
+        width: 95%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 15px;
+        
+        .videoControls__timeline {
+            input{
+                width: 100%;
+                outline: none;
+                height: 4px;
+                cursor: pointer;
+            }
+        }
+
+        .videoControls__btns {
+            display: flex;
+            margin-top: 10px;
+        }
+        button {
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0);
+            color: white;
+            border: none;
+            font-size: 20px;
+            margin: 0 15px;
+        }
+        
+        .videoControls__time {
+            margin: 0 15px;
+        }
+        
+        .videoControls__fullScreen {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .leave {
+            visibility: hidden;
+            width: 0px;
+            transition: all 0.2s ease-out;
+        }
+        .enter {
+            visibility: visible;
+            width: 100px;
+            transition: all 0.2s ease-in;
+            
+        }
+        
+
+    }
+}
