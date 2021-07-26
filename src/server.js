@@ -17,6 +17,7 @@ app.set("view engine", "pug");  //  사용할 템플리트 엔진 설정(pug)
 app.set("views", process.cwd() + "/src/views"); // 기본 디렉토리를 변경 (node모듈을 호출한 작업디렉토리의 절대경로 + "파일위치")
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));    // 중첩된 개체 허용
+app.use(express.json());
 
 app.use(session({
     secret: process.env.COOKIE_SECRET,   // cookie에 sign할 때 사용하는 string
