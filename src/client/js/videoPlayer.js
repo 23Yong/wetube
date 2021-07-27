@@ -96,7 +96,7 @@ const handleMouseLeave = () => {
 }
 
 const handleKeydown = (event) => {
-    if(event.key === ' ') {
+    if(event.key === "Space") {
         event.preventDefault();
         handlePlayClick();
     }
@@ -129,7 +129,7 @@ timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
-window.addEventListener("keydown", handleKeydown);
+videoContainer.addEventListener("keydown", handleKeydown);
 video.addEventListener("click", handlePlayClick);
 vidoeVolume.addEventListener("mouseenter", handleMouseHoverIn);
 vidoeVolume.addEventListener("mouseleave", handelMouseHoverOut);
