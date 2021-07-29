@@ -8,7 +8,10 @@ let recorder;
 let videoFile;
 
 const handleDownload = async() => {
-    const ffmpeg = createFFmpeg({ log: true });
+    const ffmpeg = createFFmpeg({ 
+        corePath:  'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js',
+        log: true,
+    });
     await ffmpeg.load();
 
     ffmpeg.FS("writeFile", "recording.webm", await fetchFile(videoFile)); // ffmpeg의 가상의 세계에 파일을 생성
@@ -16,9 +19,15 @@ const handleDownload = async() => {
     await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4"); // ffmpeg.run은 가상 컴퓨터에 이미 존재하는 파일을 i(input)으로 받는것
         // 초당 60프레임으로 인코딩
     
+    const mp4File = ffmpeg.FS("readFile", "output.mp4");
+
+    const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+
+    const mp4Url = URL.createObjectURL(mp4Blob);
+
     const a = document.createElement("a");
-    a.href = videoFile;
-    a.download = "MyRecording.webm";
+    a.href = mp4Url
+    a.download = "MyRecording.mp4";
     document.body.appendChild(a);
     a.click();
 };
