@@ -15,11 +15,11 @@ const files = {
 
 const downloadFile = (fileUrl, fileName) => {
     const a = document.createElement("a");
-    a.href = fileUrl
+    a.href = fileUrl;
     a.download = fileName;
     document.body.appendChild(a);
     a.click();
-}
+};
 
 const handleDownload = async() => {
     actionBtn.removeEventListener("click", handleDownload);
@@ -29,7 +29,7 @@ const handleDownload = async() => {
     actionBtn.disabled = true;
 
     const ffmpeg = createFFmpeg({ 
-        corePath:  'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js',
+        corePath:  "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
         log: true,
     });
     await ffmpeg.load();
@@ -41,10 +41,10 @@ const handleDownload = async() => {
     await ffmpeg.run(
         "-i",
         files.input,
-        "-ss", 
-        "00:00:01", 
-        "-frames:v", 
-        "1", 
+        "-ss",
+        "00:00:01",
+        "-frames:v",
+        "1",
         files.thumb
     );
 
@@ -52,7 +52,7 @@ const handleDownload = async() => {
     const thumbFile = ffmpeg.FS("readFile", files.thumb);
 
     const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
-    const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
+      const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
 
     const mp4Url = URL.createObjectURL(mp4Blob);
     const thumbUrl = URL.createObjectURL(thumbBlob);
@@ -77,18 +77,18 @@ const handleStart = () => {
     actionBtn.innerText = "Recording";
     actionBtn.disabled = true;
     actionBtn.removeEventListener("click", handleStart);
-    
-    recorder = new MediaRecorder(stream);
+
+    recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
     recorder.ondataavailable = (event) => {
         videoFile = URL.createObjectURL(event.data);
         video.srcObject = null;
         video.src = videoFile;
-        video.loog = true;
+        video.loop = true;
         video.play();
         actionBtn.innerText = "Download";
         actionBtn.disabled = false;
         actionBtn.addEventListener("click", handleDownload);
-    }
+    };
     recorder.start();
     setTimeout(() => {
         recorder.stop();
@@ -100,7 +100,7 @@ const init = async () => {
         audio: false,
         video: {
             width: 1024,
-            height: 575,
+            height: 576,
         },
     });
     video.srcObject = stream;
