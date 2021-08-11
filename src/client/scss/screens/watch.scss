@@ -5,10 +5,42 @@
     width: 100%;
     margin: 0 auto;
     margin-top: 20px;
+    .video__comment-form {
+        textarea {
+            border: none;
+            border-bottom: 1px solid gray;
+            background-color: #0C0C0C;
+            color: white;
+            transition: all 0.3s ease-in-out;
+            &:focus { 
+                outline: none;
+                border-bottom: 1px solid white;
+            }
+        }
+
+        button {
+            background-color: ivory;
+            color: black;
+            border: none;
+        }
+    }
     .video__comment {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
         padding: 10px 10px;
         border-radius: 9999px;
         background-color: white;
         color: black;
+
+        .comment-delBtn {
+            padding-right: 5px;
+            opacity: 0.3;
+            transition: all 0.4s ease;
+            &:hover {
+                opacity: 1;
+            }
+            align-items: center;
+        }
     }
 }
