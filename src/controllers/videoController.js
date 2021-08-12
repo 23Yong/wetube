@@ -157,7 +157,6 @@ export const deleteComment = async(req, res) => {
 
     if(!comment) { return res.sendStatus(404); }
     if(user._id != comment.owner) { return res.sendStatus(404); }
-    console.log(comment);
 
     video.comments.remove(commentId);
     await Comment.findByIdAndDelete(commentId);
